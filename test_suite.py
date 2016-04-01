@@ -1,25 +1,61 @@
 #importing classes
 from baseline import BaseLine
 from review import Review
+import json
 
-#creating object for baseline model
-base_obj = BaseLine() #Models will probably take training data here.
-test_review = Review("Went to get icecream here yesterday. It was very"
-    + "beautiful! We sat outside on their patio and watched the clouds"
-    + "roll by while we ate. Lovely experience.")
-test_2 = Review("Lame winter review")
+reviews = [] #  creating a list of reviews to classify
 
-#creating a list of reviews to classify
-parsed_reviews = [test_review, test_2]
+#  Reading training data into reviews list
+with open("spring-pittsburgh-training.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('spring',json_obj)]
 
-#empty list that will contain baseline's classification of each review.
-baseline_classified = []
+with open("summer-pittsburgh-training.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('summer',json_obj)]
 
-#list of expected (classification, review) tuples.
-expected_classifications = [('summer', test_review), ('winter', test_2)]
+with open("fall-pittsburgh-training.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('fall',json_obj)]
 
-for review in parsed_reviews:
-  baseline_classified += [(base_obj.classify(review.sentences), review)]
+with open("winter-pittsburgh-training.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('winter',json_obj)]
+
+#  Creating model objects
+base_obj = BaseLine(reviews)
+baseline_classified = [] #  classifications stored here
+
+reviews = [] #  resetting reviews list to save memory
+
+
+#  Reading test data into reviews list
+with open("spring-pittsburgh.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('spring',json_obj)]
+
+with open("summer-pittsburgh.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('summer',json_obj)]
+
+with open("fall-pittsburgh.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('fall',json_obj)]
+
+with open("winter-pittsburgh.json") as spring_file:
+  for line in spring_file:
+    json_obj = json.loads(line)
+    reviews += [('winter',json_obj)]
+
+for __, json_obj in reviews:
+  baseline_classified += [(base_obj.classify(json_obj['text']), json_obj)]
 
 correct = 0
 index = 0
@@ -27,10 +63,10 @@ index = 0
 #Going through every classification baseline made
 for classification in baseline_classified:
   #if the tuple the baseline predicted is correct...
-  if classification == expected_classifications[index]:
+  if classification == reviews[index]:
     correct = correct + 1
   index = index + 1
 
 #print accuracy
-print(correct / len(expected_classifications))
+print(correct / len(reviews))
 
