@@ -6,23 +6,23 @@ import json
 reviews = [] #  creating a list of reviews to classify
 
 #  Reading training data into reviews list
-with open("spring-pittsburgh-training.json") as spring_file:
-  for line in spring_file:
+with open("spring-pittsburgh-training.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('spring',json_obj)]
 
-with open("summer-pittsburgh-training.json") as spring_file:
-  for line in spring_file:
+with open("summer-pittsburgh-training.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('summer',json_obj)]
 
-with open("fall-pittsburgh-training.json") as spring_file:
-  for line in spring_file:
+with open("fall-pittsburgh-training.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('fall',json_obj)]
 
-with open("winter-pittsburgh-training.json") as spring_file:
-  for line in spring_file:
+with open("winter-pittsburgh-training.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('winter',json_obj)]
 
@@ -34,23 +34,23 @@ reviews = [] #  resetting reviews list to save memory
 
 
 #  Reading test data into reviews list
-with open("spring-pittsburgh.json") as spring_file:
-  for line in spring_file:
+with open("spring-pittsburgh.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('spring',json_obj)]
 
-with open("summer-pittsburgh.json") as spring_file:
-  for line in spring_file:
+with open("summer-pittsburgh.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('summer',json_obj)]
 
-with open("fall-pittsburgh.json") as spring_file:
-  for line in spring_file:
+with open("fall-pittsburgh.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('fall',json_obj)]
 
-with open("winter-pittsburgh.json") as spring_file:
-  for line in spring_file:
+with open("winter-pittsburgh.json") as json_file:
+  for line in json_file:
     json_obj = json.loads(line)
     reviews += [('winter',json_obj)]
 
