@@ -68,5 +68,5 @@ for classification in baseline_classified:
   index = index + 1
 
 #print accuracy
-print(correct / len(reviews))
+print (float(correct) / len(reviews))
 
