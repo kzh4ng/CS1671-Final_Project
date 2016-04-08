@@ -1,5 +1,6 @@
 # Importing classes
 from baseline import BaseLine
+from logreg import LogReg
 from review import Review
 import argparse
 import json
@@ -39,8 +40,14 @@ with open("winter-pittsburgh-training.json") as json_file:
 model = args.model
 if (model == "baseline"):
   model_obj = BaseLine(reviews)
+
+if (model == "logreg"):
+  model_obj = LogReg(reviews)
+  #testing LogReg class
+  model_obj.classify_all(reviews)
+
 else: # put additional models here.
-  print "Argument Error: invalid model specified"
+  print("Argument Error: invalid model specified")
   sys.exit()
 
 model_classified = [] #  classifications stored here
