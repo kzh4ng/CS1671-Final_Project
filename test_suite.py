@@ -41,10 +41,9 @@ model = args.model
 if (model == "baseline"):
   model_obj = BaseLine(reviews)
 
-if (model == "logreg"):
+elif (model == "logreg"):
   model_obj = LogReg(reviews)
   #testing LogReg class
-  model_obj.classify_all(reviews)
 
 else: # put additional models here.
   print("Argument Error: invalid model specified")
@@ -74,8 +73,16 @@ with open("winter-pittsburgh.json") as json_file:
     json_obj = json.loads(line)
     reviews += [('winter',json_obj)]
 
+"""
 for __, json_obj in reviews:
   model_classified += [(model_obj.classify(json_obj['text']), json_obj)]
+"""
+
+#Made more sense in my case to just pass all the test reviews at once,
+#since the LogisiticRegression classify method expects all of the test corpus
+#at once. I imagine the other models will work in a similar manner, but if not
+#we can add more logic.
+model_classified = model_obj.classify_all(reviews)
 
 correct = 0
 index = 0
@@ -83,7 +90,7 @@ index = 0
 # Going through every classification baseline made
 for classification in model_classified:
   # if the tuple the baseline predicted is correct...
-  if classification == reviews[index]:
+  if classification == reviews[index][0]:
     correct = correct + 1
   index = index + 1
 

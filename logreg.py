@@ -7,6 +7,7 @@ categorizing reviews into seasons.
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.feature_selection import RFE
 
 class LogReg:
 
@@ -29,8 +30,9 @@ class LogReg:
     #Vectorizing using TfidfVectorizer, which takes a count of all the words
     #and then does some extra work to eliminate ones that are too common among
     #all labels to be worth while.
-    vectorizer = TfidfVectorizer(min_df = 1)
-    X = vectorizer.fit_transform(self.corpus)
+    self.vectorizer = TfidfVectorizer(min_df = 1)
+    X = self.vectorizer.fit_transform(self.corpus)
+    x_names = self.vectorizer.get_feature_names()
     y = self.labels
 
     model = LogisticRegression()
@@ -38,15 +40,15 @@ class LogReg:
     model.fit(X, y)
     self.model = model
 
-
   #Classify collection of sentences in parsed_review_sentences (which should be
   #a list of parsed/tokenized sentences for a single review). Return the
   #predicted season for the collection of sentences.
   def classify(self, parsed_review_sentences):
     test_corpus = []
     for sentence in parsed_review_sentences:
-      test_corpus += [sentence]
+      test_corpus += [("", sentence)]
 
+    self.classify_all(test_corpus)
     return 'summer'
 
   #This is mainly a test method while I work on some implementation details
@@ -54,12 +56,26 @@ class LogReg:
     test_corpus = []
     y = []
     for review in all_test_data:
-      test_corpus += [review[1]]
+      test_corpus += [review[1]['text']]
+      y += [review[0]]
+    
+    #Used transform instead of fit_transform
+    #for test data so number of features will match
+    X = self.vectorizer.transform(test_corpus)
+    results = self.model.predict(X)
+    return results
+
+  #Work in progress, may be able to use RFE
+  #to determine most useful words for classifcation
+  def vocabulary(self, all_test_data):
+    test_corpus = []
+    y = []
+    for review in all_test_data:
+      test_corpus += [review[1]['text']]
       y += [review[0]]
 
-    vectorizer = TfidfVectorizer(min_df = 1)
-    X = vectorizer.fit_transform(self.corpus)
+    X = self.vectorizer.transform(test_corpus)
     results = self.model.predict(X)
-    print("results: " )
-    print(results)
-
+    selector = RFE(self.model, 100, 1)
+    sel_result = selector.fit(X, y)
+    print(selector.transform(X))
