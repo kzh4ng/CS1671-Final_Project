@@ -49,7 +49,7 @@ class LogReg:
       test_corpus += [("", sentence)]
 
     self.classify_all(test_corpus)
-    return 'summer'
+    return 'summer' #TODO: do we need this or should it be removed?
 
   #This is mainly a test method while I work on some implementation details
   def classify_all(self, all_test_data):
