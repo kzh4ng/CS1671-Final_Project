@@ -1,0 +1,18 @@
+City		Baseline	LogReg		MultinomialNB		GaussianNB
+Las Vegas	0.28277		0.26853		0.28233
+Phoenix		0.26901		0.27300		0.27375
+Charlotte	0.27756		0.27567		0.28323
+Madison		0.27476		0.27476		0.28365
+Pittsburgh	0.27627		0.26949		0.27142
+Edinburgh	0.34606		0.34307		0.34681
+Mesa		0.27336		0.26384		0.26596
+
+REVERSED TRAINING AND TEST DATASETS
+City		Baseline	LogReg		MultinomialNB		GaussianNB
+Las Vegas	0.28246		0.27272
+Phoenix		0.26857		0.28552
+Charlotte	0.27831		0.31067
+Madison		0.27559		0.27559
+Pittsburgh	0.27727		0.31363
+Edinburgh	0.34246		0.35616
+Mesa		0.27333		0.22000
