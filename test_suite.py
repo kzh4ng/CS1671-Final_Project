@@ -1,6 +1,7 @@
 # Importing classes
 from baseline import BaseLine
 from logreg import LogReg
+from naivebayes import NaiveBayes
 from review import Review
 import argparse
 import json
@@ -9,29 +10,30 @@ import sys
 # Create command line arguments.
 parser = argparse.ArgumentParser(description="Uses NLP models to predict the season of a Yelp review.") # TODO: revise so-called project title.
 parser.add_argument("-m", required=True, default="baseline", help="the NLP model to be used", action="store", dest="model")
-#parser.add_argument("-r", required=True, help="name of training file", action="store", dest="train_file")
-#parser.add_argument("-t", required=True, help="name of test file", action="store", dest="test_file")
+parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name", action="store", dest="classifier")
 args = parser.parse_args()
 
+
 reviews = [] #  creating a list of reviews to classify
+classifier = args.classifier.lower() # stores file classifier (i.e. "pittsburgh")
 
 #  Reading training data into reviews list
-with open("spring-pittsburgh-training.json") as json_file:
+with open("spring-"+classifier+"-training.json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('spring',json_obj)]
 
-with open("summer-pittsburgh-training.json") as json_file:
+with open("summer-"+classifier+"-training.json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('summer',json_obj)]
 
-with open("fall-pittsburgh-training.json") as json_file:
+with open("fall-"+classifier+"-training.json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('fall',json_obj)]
 
-with open("winter-pittsburgh-training.json") as json_file:
+with open("winter-"+classifier+"-training.json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('winter',json_obj)]
@@ -43,7 +45,12 @@ if (model == "baseline"):
 
 elif (model == "logreg"):
   model_obj = LogReg(reviews)
-  #testing LogReg class
+
+elif (model == "multinomialNB"):
+  model_obj = NaiveBayes(reviews, "multinomial")
+
+elif (model == "gaussianNB"):
+  model_obj = NaiveBayes(reviews, "gaussian")
 
 else: # put additional models here.
   print("Argument Error: invalid model specified")
@@ -53,22 +60,22 @@ model_classified = [] #  classifications stored here
 reviews = [] #  resetting reviews list to save memory
 
 #  Reading test data into reviews list
-with open("spring-pittsburgh.json") as json_file:
+with open("spring-"+classifier+".json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('spring',json_obj)]
 
-with open("summer-pittsburgh.json") as json_file:
+with open("summer-"+classifier+".json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('summer',json_obj)]
 
-with open("fall-pittsburgh.json") as json_file:
+with open("fall-"+classifier+".json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('fall',json_obj)]
 
-with open("winter-pittsburgh.json") as json_file:
+with open("winter-"+classifier+".json") as json_file:
   for line in json_file:
     json_obj = json.loads(line)
     reviews += [('winter',json_obj)]
