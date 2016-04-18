@@ -11,7 +11,15 @@ from sklearn.feature_selection import RFE
 
 class LogReg:
 
-  def __init__(self, reviews):
+  def __init__(
+      self,
+      reviews,
+      vectorizer = TfidfVectorizer(min_df = 1),
+      model = LogisticRegression()
+      ):
+    self.model = model
+    self.vectorizer = vectorizer
+
     corpus = []
     labels = []
     for review in reviews:
@@ -21,24 +29,32 @@ class LogReg:
     #setting variables for the object
     self.corpus = corpus
     self.labels = labels
-
     self.reviews = reviews
-    #calling this object's train method
-    self.train()
 
-  def train(self):
-    #Vectorizing using TfidfVectorizer, which takes a count of all the words
-    #and then does some extra work to eliminate ones that are too common among
-    #all labels to be worth while.
-    self.vectorizer = TfidfVectorizer(min_df = 1)
     X = self.vectorizer.fit_transform(self.corpus)
     x_names = self.vectorizer.get_feature_names()
     y = self.labels
 
-    model = LogisticRegression()
     #Training the model
-    model.fit(X, y)
-    self.model = model
+    self.model.fit(X, y)
+
+
+  def train(self, reviews):
+    #Vectorizing using TfidfVectorizer, which takes a count of all the words
+    #and then does some extra work to eliminate ones that are too common among
+    #all labels to be worth while.
+    
+    #adding to the corpus and to the labels for this object
+    for review in reviews:
+      self.corpus += [review[1]["text"]]
+      self.labels += [review[0]]
+
+    X = self.vectorizer.fit_transform(self.corpus)
+    x_names = self.vectorizer.get_feature_names()
+    y = self.labels
+
+    #Training the model
+    self.model.fit(X, y)
 
   #Classify collection of sentences in parsed_review_sentences (which should be
   #a list of parsed/tokenized sentences for a single review). Return the
