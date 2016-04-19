@@ -11,6 +11,11 @@ from sklearn.feature_selection import RFE
 
 class LogReg:
 
+  """
+  Initialization sets the objects model, vectorizer, labels, and corpus
+  variables. Initialization also performs the initial training for the model
+  and vectorizer using the given reviews.
+  """
   def __init__(
       self,
       reviews,
@@ -39,11 +44,14 @@ class LogReg:
     self.model.fit(X, y)
 
 
+  """
+  Trains up the vectorizer and model with the given reviews.
+  """
   def train(self, reviews):
     #Vectorizing using TfidfVectorizer, which takes a count of all the words
     #and then does some extra work to eliminate ones that are too common among
     #all labels to be worth while.
-    
+
     #adding to the corpus and to the labels for this object
     for review in reviews:
       self.corpus += [review[1]["text"]]
@@ -56,7 +64,11 @@ class LogReg:
     #Training the model
     self.model.fit(X, y)
 
-  #This is mainly a test method while I work on some implementation details
+  """
+  Classifies all the test data given, and returns a list of the
+  classifications, which each index corresponding to the index of a review in
+  the given test data.
+  """
   def classify_all(self, all_test_data):
     test_corpus = []
     y = []
@@ -70,8 +82,11 @@ class LogReg:
     results = self.model.predict(X)
     return results
 
-  #Work in progress, may be able to use RFE
-  #to determine most useful words for classifcation
+  """
+  TODO
+  Returns the vocabulary used to classify the given test data, with the
+  highested ranked (that is, most indicative) words / features listed first.
+  """
   def vocabulary(self, all_test_data, selector = None):
 
     #Can't create RFE(self.model, 100, 1) as default for selector directly
