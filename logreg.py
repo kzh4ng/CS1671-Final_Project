@@ -72,7 +72,12 @@ class LogReg:
 
   #Work in progress, may be able to use RFE
   #to determine most useful words for classifcation
-  def vocabulary(self, all_test_data):
+  def vocabulary(self, all_test_data, selector = None):
+
+    #Can't create RFE(self.model, 100, 1) as default for selector directly
+    #self must be defined for this scope first.
+    if selector == None:
+      selector = RFE(self.model, 100, 1)
     test_corpus = []
     y = []
     for review in all_test_data:
@@ -81,6 +86,5 @@ class LogReg:
 
     X = self.vectorizer.transform(test_corpus)
     results = self.model.predict(X)
-    selector = RFE(self.model, 100, 1)
     sel_result = selector.fit(X, y)
-    print(selector.transform(X))
+    return selector.transform(X)

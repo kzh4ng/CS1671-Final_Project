@@ -7,6 +7,10 @@ from logreg import LogReg
 
 class testLogReg(unittest.TestCase):
 
+  """
+  Every method needs a LogReg object with the vectorizer and model mocked out,
+  as those objects would perform potentially slow methods otherwise.
+  """
   def setUp(self):
     self.mockV = Mock()
     self.mockM = Mock()
@@ -96,11 +100,9 @@ class testLogReg(unittest.TestCase):
     assert self.test_obj.labels == ["winter", "fall"]
 
   """
-  After calling the train method the labels should be expanded to include the
-  text for those reviews that are passed into the method. Test mocks the
-  vectorizer and model created in the initialization of the object and checks
-  to see that the new reviews are parsed and saved correctly in the labels
-  variable.
+  The train method should call the model's fit method after parsing out the
+  appropriate data from the given input. This test asserts that the model calls
+  fit with the expect arguments when the train method is executed.
   """
   def test_train_trained(self):
     #Mocking the return value for fit_transform, since that result is passed to
@@ -118,10 +120,40 @@ class testLogReg(unittest.TestCase):
         ["winter", "fall"]
         )
 
+  """
+  classify_all should complete with a call to the
+  object's model's predict method, which does the work of predicting the season
+  for a given test corpus. This test sets the return value for model.predict
+  and asserts that the returned value of classify_all matches that.
+  """
   def test_classify_all(self):
+    self.mockM.predict.return_value = ["summer", "fall", "winter", "spring"]
+    assert self.test_obj.classify_all([("some", {"text" : "data"})]) == [
+        "summer",
+        "fall",
+        "winter",
+        "spring"
+        ]
+
+
+  """
+  The vocabulary method is a WIP method that should
+  return a list of strings, with each string representing
+  a word that can be used to predict a particular season.
+  This test checks to make sure that at the very least the
+  vocabulary method is returning a list of strings.
+  """
+  def test_vocabulary(self):
+    #Mocking the selector used in the method to avoid a lot of computation
+    mockS = Mock()
+    mockS.transform.return_value = ["fireplace", "warmth"]
+
+    result = self.test_obj.vocabulary([("summer", {"text": "data"})], selector
+        = mockS)
+    for i in result:
+      assert isinstance(i, str)
+
 
 
 if __name__ == '__main__':
   unittest.main()
-
-
