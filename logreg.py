@@ -56,17 +56,6 @@ class LogReg:
     #Training the model
     self.model.fit(X, y)
 
-  #Classify collection of sentences in parsed_review_sentences (which should be
-  #a list of parsed/tokenized sentences for a single review). Return the
-  #predicted season for the collection of sentences.
-  def classify(self, parsed_review_sentences):
-    test_corpus = []
-    for sentence in parsed_review_sentences:
-      test_corpus += [("", sentence)]
-
-    self.classify_all(test_corpus)
-    return 'summer' #TODO: do we need this or should it be removed?
-
   #This is mainly a test method while I work on some implementation details
   def classify_all(self, all_test_data):
     test_corpus = []
@@ -74,7 +63,7 @@ class LogReg:
     for review in all_test_data:
       test_corpus += [review[1]['text']]
       y += [review[0]]
-    
+
     #Used transform instead of fit_transform
     #for test data so number of features will match
     X = self.vectorizer.transform(test_corpus)
