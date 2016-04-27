@@ -149,7 +149,7 @@ for __, json_obj in reviews:
 #we can add more logic.
 model_classified = model_obj.classify_all(reviews)
 
-print model_classified[1]
+print(model_classified[1])
 correct = 0
 index = 0
 
