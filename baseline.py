@@ -8,6 +8,7 @@ class BaseLine:
     counts = categories
     for review in reviews:
       counts[review[0]] += 1
+    print counts
 
     common_count, common_cat = max((x, y) for y, x in counts.items())
     self.most_common_cat = common_cat
