@@ -5,9 +5,13 @@ categorizing reviews into seasons.
 
 """
 import json
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import RandomizedLogisticRegression
 from sklearn.feature_selection import RFE
+from sklearn.feature_selection import f_classif, SelectKBest
 
 class LogReg:
 
@@ -19,11 +23,12 @@ class LogReg:
   def __init__(
       self,
       reviews,
-      vectorizer = TfidfVectorizer(min_df = 1),
-      model = LogisticRegression()
+      vectorizer = TfidfVectorizer(max_df = 1, ngram_range = (1,3)),
+      model = LinearSVC()
       ):
     self.model = model
     self.vectorizer = vectorizer
+    self.selector = RFE(self.model, n_features_to_select = 10000, step = 1000, verbose = 100)
 
     corpus = []
     labels = []
@@ -37,11 +42,22 @@ class LogReg:
     self.reviews = reviews
 
     X = self.vectorizer.fit_transform(self.corpus)
-    x_names = self.vectorizer.get_feature_names()
+    self.feature_names = self.vectorizer.get_feature_names()
     y = self.labels
+    num_labels = []
+    for i in self.labels:
+      if i == "summer":
+        num_labels.append(0)
+      if i == "winter":
+        num_labels.append(1)
+      if i == "fall":
+        num_labels.append(2)
+      if i == "spring":
+        num_labels.append(3)
 
     #Training the model
-    self.model.fit(X, y)
+    X_new = self.selector.fit_transform(X,self.labels)
+    self.model.fit(X_new, self.labels)
 
 
   """
@@ -58,11 +74,13 @@ class LogReg:
       self.labels += [review[0]]
 
     X = self.vectorizer.fit_transform(self.corpus)
-    x_names = self.vectorizer.get_feature_names()
+    self.feature_names = self.vectorizer.get_feature_names()
+    self.feature_names = np.asarray(feature_names)
     y = self.labels
 
     #Training the model
-    self.model.fit(X, y)
+    X_new = SelectKBest(chi2, k=100).fit_transform(X, y)
+    self.model.fit(X_new, y)
 
   """
   Classifies all the test data given, and returns a list of the
@@ -79,7 +97,14 @@ class LogReg:
     #Used transform instead of fit_transform
     #for test data so number of features will match
     X = self.vectorizer.transform(test_corpus)
-    results = self.model.predict(X)
+    X_new = self.selector.transform(X)
+    results = self.model.predict(X_new)
+    categories = ["spring", "summer", "fall", "winter"]
+    for i, category in enumerate(categories):
+      top10 = np.argsort(self.model.coef_[i])[-10:]
+      print(top10)
+      for j in top10:
+        print("%s: %s" % (category, "".join(self.feature_names[j])))
     return results
 
   """
