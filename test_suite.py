@@ -4,7 +4,7 @@ from logreg import LogReg
 from naivebayes import NaiveBayes
 #from topic2 import TopicModel
 from review import Review
-#from KNN import knn
+from KNN import knn
 import argparse
 import json
 import sys
@@ -46,7 +46,7 @@ if args.invert == "False":
       json_obj = json.loads(line)
       target.append(3)
       reviews += [('winter',json_obj)]
-'''else:
+else:
   with open("spring-"+classifier+".json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
@@ -69,14 +69,14 @@ if args.invert == "False":
     for line in json_file:
       json_obj = json.loads(line)
       target.append(3)
-      reviews += [('winter',json_obj)]'''
+      reviews += [('winter',json_obj)]
 
 #  Creating model objects
 model = args.model
 if (model == "baseline"):
   model_obj = BaseLine(reviews, {"winter": 0, "spring": 0, "summer": 0, "fall": 0})
-#elif (model == "kNearestNeighbors"):
-#  model_obj = knn(reviews,target)
+elif (model == "kNearestNeighbors"):
+  model_obj = knn(reviews,target)
 elif (model == "logreg"):
   model_obj = LogReg(reviews)
 
@@ -86,8 +86,8 @@ elif (model == "multinomialNB"):
 elif (model == "gaussianNB"):
   model_obj = NaiveBayes(reviews, "gaussian")
 
-#elif (model == "lda"):
-#  model_obj = TopicModel(reviews)
+elif (model == "lda"):
+  model_obj = TopicModel(reviews)
 
 else: # put additional models here.
   print("Argument Error: invalid model specified")
