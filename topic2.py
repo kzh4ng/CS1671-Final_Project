@@ -1,6 +1,6 @@
 """
 Author: Kevin Zhang
-Description: Topic Modeling with Latent Dirichlet Association and logistic regression
+Description: Topic Modeling with Latent Dirichlet Allocation and logistic regression
 for categorizing Yelp reviews
 
 """
@@ -22,15 +22,12 @@ class TopicModel:
     labels = []
     for review in reviews:
       corpus += [(review[1]["text"])]     #access text field in JSON object
-      labels += [(review[0])]         #access season
+      labels += [(review[0])]             #access season
 
       # setting variables for the object.
     self.corpus = corpus
     self.labels = labels
     self.reviews = reviews
-
-      #print self.corpus[0]
-      #print self.labels[0]
 
     self.train() # calling this object's train method.
 
@@ -46,10 +43,9 @@ class TopicModel:
     self.dictionary = dictionary
     # convert tokenized documents into a document-term matrix
     corpus = [dictionary.doc2bow(text) for text in texts]
-    print dictionary[1]
-
+    
     # generate LDA model
-    ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=20, id2word = dictionary, passes=30)   
+    ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=50, id2word = dictionary, passes=30)   
     self.ldamodel = ldamodel
 
     topics = []
