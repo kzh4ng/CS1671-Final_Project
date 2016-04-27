@@ -19,7 +19,14 @@ reviews = [] #  creating a list of reviews to classify
 #classifier = args.classifier.lower() # stores file classifier (i.e. "pittsburgh")
 
 #  Reading training data into reviews list
-categories = {"mexican": 0, "chinese": 0, "pizza": 0, "sandwiches": 0, "burgers": 0, "fast-food": 0, "italian": 0}
+categories = {"doctors": 0, "chinese":0}
+#categories = {"japanese":0, "chinese": 0, "thai":0, "indian":0, "middle-eastern":0}
+categories = {"mexican":0, "chinese":0, "italian":0, "japanese":0, "middle-eastern":0, "greek":0, "indian":0, "thai":0, "american-traditional":0, "korean":0, "lebanese":0, "vietnamese":0}
+'''categories = {"mexican": 0, "chinese": 0, "pizza": 0, "sandwiches": 0, 
+  "burgers": 0, "fast-food": 0, "italian": 0, "american-traditional": 0,
+  "japanese": 0, "coffee-tea": 0, "specialty-food": 0, "bakeries": 0, 
+  "ice-cream-frozen-yogurt": 0, "indian": 0, "greek": 0, "middle-eastern": 0, 
+  "donuts": 0, "steakhouses": 0, "seafood": 0, "thai": 0, "korean":0, "lebanese":0, "vietnamese":0}'''
 if args.invert == "False":
   for classifier in categories:
     with open("spring-"+classifier+"-training.json") as json_file:
