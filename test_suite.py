@@ -4,6 +4,7 @@ from logreg import LogReg
 from naivebayes import NaiveBayes
 from topic2 import TopicModel
 from review import Review
+from KNN import knn
 import argparse
 import json
 import sys
@@ -11,12 +12,13 @@ import sys
 # Create command line arguments.
 parser = argparse.ArgumentParser(description="Uses NLP models to predict the season of a Yelp review.") # TODO: revise so-called project title.
 parser.add_argument("-m", required=True, default="baseline", help="the NLP model to be used", action="store", dest="model")
-parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name", action="store", dest="classifier")
+parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name or business category", action="store", dest="classifier")
 parser.add_argument("-i", required=False, default = "False", help="indicator for whether training and test data should be inverted", action="store", dest="invert")
 args = parser.parse_args()
 
 
 reviews = [] #  creating a list of reviews to classify
+target = [];
 classifier = args.classifier.lower() # stores file classifier (i.e. "pittsburgh")
 
 #  Reading training data into reviews list
@@ -24,48 +26,57 @@ if args.invert == "False":
   with open("spring-"+classifier+"-training.json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(0)
       reviews += [('spring',json_obj)]
 
   with open("summer-"+classifier+"-training.json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(1)
       reviews += [('summer',json_obj)]
 
   with open("fall-"+classifier+"-training.json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(2)
       reviews += [('fall',json_obj)]
 
   with open("winter-"+classifier+"-training.json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(3)
       reviews += [('winter',json_obj)]
 else:
   with open("spring-"+classifier+".json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(0)
       reviews += [('spring',json_obj)]
 
   with open("summer-"+classifier+".json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(1)
       reviews += [('summer',json_obj)]
 
   with open("fall-"+classifier+".json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(2)
       reviews += [('fall',json_obj)]
 
   with open("winter-"+classifier+".json") as json_file:
     for line in json_file:
       json_obj = json.loads(line)
+      target.append(3)
       reviews += [('winter',json_obj)]
 
 #  Creating model objects
 model = args.model
 if (model == "baseline"):
   model_obj = BaseLine(reviews, {"winter": 0, "spring": 0, "summer": 0, "fall": 0})
-
+elif (model == "kNearestNeighbors"):
+  model_obj = knn(reviews,target)
 elif (model == "logreg"):
   model_obj = LogReg(reviews)
 
