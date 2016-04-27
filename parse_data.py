@@ -54,7 +54,6 @@ def parse_all_reviews_by_season():
 	summerfile.close()
 	fallfile.close()
 
-
 def get_city_list():
 	cities = open("city_list.txt", "w")
 	places = []
@@ -71,7 +70,7 @@ def get_city_list():
 			city_dict[city] = list(p)
 
 	for c in city_dict.keys(): 
-		cities.write(c) 
+		cities.write(c)
 
 def print_city_list():
 	places = []
@@ -93,9 +92,6 @@ def print_city_list():
 	for v,k in city_dict_view:
 		print "%s: %d" % (k,v)
 
-	#for c in city_dict:
-	#	print c + ": " + str(city_dict[c])
-
 def get_all_categories():
 	business_list = []
 	with open('yelp_academic_dataset_business.json') as f:
@@ -112,6 +108,18 @@ def get_all_categories():
 	return categories_dict
 
 
+def parse_by_category(cat):
+	business_list = []
+	with open('yelp_academic_dataset_business.json') as f:
+		for line in f:
+			business_list.append(json.loads(line))
+	city_business_list = []
+	for b in business_list:
+		curr_cats = b['categories']
+		if cat in curr_cats:
+			city_business_list.append(b['business_id'])
+	return city_business_list
+
 def parse_by_city(city):
 	business_list = []
 	with open('yelp_academic_dataset_business.json') as f:
@@ -123,6 +131,20 @@ def parse_by_city(city):
 			city_business_list.append(b['business_id'])
 	return city_business_list
 	#return business_list
+
+def parse_by_category_and_city(cat, city):
+	business_list = []
+	with open('yelp_academic_dataset_business.json') as f:
+		for line in f:
+			business_list.append(json.loads(line))
+	city_business_list = []
+	for b in business_list:
+		curr_cats = b['categories']
+		if cat in curr_cats:
+			if b['city'] == city:
+				city_business_list.append(b['business_id'])
+	return city_business_list
+
 
 def get_reviews_from_business_list(business_list):
 	reviews = []
@@ -223,13 +245,111 @@ def sort_reviews_by_season(reviews, city):
 			#fallfile.write(str(fall[item]) + "\n")
 			json.dump(fall[item], fallfile2)
 			fallfile2.write("\n")
-		
+	
+'''
+business_list = parse_by_category("Pizza") 
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "pizza")
+
+business_list = parse_by_category("Mexican") 
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "mexican")
 
 
-d = get_all_categories()
-for w in sorted(d, key=d.get, reverse=True):
-  print w, d[w]
+business_list = parse_by_category("Sandwiches") 
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "sandwiches")
 
+business_list = parse_by_category("Burgers")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "burgers")
+
+business_list = parse_by_category("Fast Food")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "fast-food")
+
+business_list = parse_by_category("Chinese")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "chinese")
+
+business_list = parse_by_category("Breakfast & Brunch")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "breakfast-brunch")
+
+business_list = parse_by_category("Italian")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "italian")
+
+business_list = parse_by_category("Food")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "food")
+
+
+business_list = parse_by_category("Restaurants")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "restuarants")
+
+business_list = parse_by_category("Nightlife")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "nightlife")
+
+business_list = parse_by_category("Bars")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "bars")
+
+business_list = parse_by_category("Hotels & Travel")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "hotels-travel")
+
+business_list = parse_by_category("Shopping")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "shopping")
+
+business_list = parse_by_category("Auto Repair")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "auto-repair")
+
+business_list = parse_by_category("Doctors")
+print len(business_list)
+reviews = get_reviews_from_business_list(business_list)
+print len(reviews)
+sort_reviews_by_season(reviews, "doctors")
+
+
+#d = get_all_categories()
+#for w in sorted(d, key=d.get, reverse=True):
+#  print w, d[w]
+'''
 
 # Generate four text files, by season, of reviews for a specific city.
 '''pittsburgh_business_list = parse_by_city("All")
