@@ -5,13 +5,13 @@ from sklearn import neighbors
 import numpy as np
 class knn:
     def __init__(self, reviews, target):
-        self.vectorizer = CountVectorizer(ngram_range=(1,3), min_df=1)
+        self.vectorizer = CountVectorizer(ngram_range=(1,3), max_df=1)
         corpus = []
         thing = np.asarray(target)
         for __, json_obj in reviews:
             corpus.append(json_obj['text'])
         self.X = self.vectorizer.fit_transform(corpus)
-        self.estimate = KNeighborsClassifier(n_neighbors=10)
+        self.estimate = KNeighborsClassifier(n_neighbors=1)
         self.estimate.fit(self.X,thing)
         pass
 
