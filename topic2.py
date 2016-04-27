@@ -43,6 +43,7 @@ class TopicModel:
     texts = self.tokenize(review_set)
     # turn our tokenized documents into a id <-> term dictionary
     dictionary = corpora.Dictionary(texts)
+    self.dictionary = dictionary
     # convert tokenized documents into a document-term matrix
     corpus = [dictionary.doc2bow(text) for text in texts]
     print dictionary[1]
@@ -53,7 +54,7 @@ class TopicModel:
 
     topics = []
     for dist in corpus:
-      tup = ldamodel.get_document_topics(dist,0)
+      tup = self.ldamodel.get_document_topics(dist,0)
       values = [x[1] for x in tup]
       topics.append(values)
 
@@ -70,8 +71,7 @@ class TopicModel:
     #tokenize, remove stop words, and stem tokens for each review
     texts = self.tokenize(test_corpus)
     #create id - term dictionary
-    dictionary = corpora.Dictionary(texts)
-    corpus = [dictionary.doc2bow(text) for text in texts]
+    corpus = [self.dictionary.doc2bow(text) for text in texts]
 
     test_topics = []
     for dist in corpus:
