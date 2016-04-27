@@ -104,8 +104,9 @@ def parse_by_city(city):
 	city_business_list = []
 	for b in business_list:
 		if b['city'] == city:
-			city_business_list.append(b['business_id'])
+	city_business_list.append(b['business_id'])
 	return city_business_list
+	#return business_list
 
 def get_reviews_from_business_list(business_list):
 	reviews = []
@@ -209,14 +210,14 @@ def sort_reviews_by_season(reviews, city):
 		
 
 # Generate four text files, by season, of reviews for a specific city.
-'''
-pittsburgh_business_list = parse_by_city("Pittsburgh")
+pittsburgh_business_list = parse_by_city("All")
 print len(pittsburgh_business_list)
 pittsburgh_reviews = get_reviews_from_business_list(pittsburgh_business_list)
 print len(pittsburgh_reviews)
-sort_reviews_by_season(pittsburgh_reviews, "pittsburgh")
+sort_reviews_by_season(pittsburgh_reviews, "all")
 
-print "Vegas"
+'''
+print "Las Vegas"
 pittsburgh_business_list = parse_by_city("Las Vegas")
 print len(pittsburgh_business_list)
 pittsburgh_reviews = get_reviews_from_business_list(pittsburgh_business_list)
