@@ -2,7 +2,7 @@
 from baseline import BaseLine
 from logreg import LogReg
 from naivebayes import NaiveBayes
-from topic2 import TopicModel
+#from topic2 import TopicModel
 from review import Review
 from KNN import knn
 import argparse
@@ -158,7 +158,7 @@ for classification in model_classified:
   # if the tuple the baseline predicted is correct...
   if classification == reviews[index][0]:
     correct = correct + 1
-    index = index + 1
+  index = index + 1
 
 print (float(correct) / len(reviews)) # print accuracy
 
