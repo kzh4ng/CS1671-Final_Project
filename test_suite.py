@@ -2,6 +2,7 @@
 from baseline import BaseLine
 from logreg import LogReg
 from naivebayes import NaiveBayes
+from topic2 import TopicModel
 from review import Review
 from KNN import knn
 import argparse
@@ -11,7 +12,7 @@ import sys
 # Create command line arguments.
 parser = argparse.ArgumentParser(description="Uses NLP models to predict the season of a Yelp review.") # TODO: revise so-called project title.
 parser.add_argument("-m", required=True, default="baseline", help="the NLP model to be used", action="store", dest="model")
-parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name", action="store", dest="classifier")
+parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name or business category", action="store", dest="classifier")
 parser.add_argument("-i", required=False, default = "False", help="indicator for whether training and test data should be inverted", action="store", dest="invert")
 args = parser.parse_args()
 
@@ -85,6 +86,9 @@ elif (model == "multinomialNB"):
 elif (model == "gaussianNB"):
   model_obj = NaiveBayes(reviews, "gaussian")
 
+elif (model == "lda"):
+  model_obj = TopicModel(reviews)
+
 else: # put additional models here.
   print("Argument Error: invalid model specified")
   sys.exit()
@@ -145,6 +149,7 @@ for __, json_obj in reviews:
 #we can add more logic.
 model_classified = model_obj.classify_all(reviews)
 
+print model_classified[1]
 correct = 0
 index = 0
 
@@ -153,7 +158,7 @@ for classification in model_classified:
   # if the tuple the baseline predicted is correct...
   if classification == reviews[index][0]:
     correct = correct + 1
-  index = index + 1
+    index = index + 1
 
 print (float(correct) / len(reviews)) # print accuracy
 
