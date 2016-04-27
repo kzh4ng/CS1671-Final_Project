@@ -2,6 +2,7 @@
 from baseline import BaseLine
 from logreg import LogReg
 from naivebayes import NaiveBayes
+from topic2 import TopicModel
 from review import Review
 import argparse
 import json
@@ -74,6 +75,9 @@ elif (model == "multinomialNB"):
 elif (model == "gaussianNB"):
   model_obj = NaiveBayes(reviews, "gaussian")
 
+elif (model == "lda"):
+  model_obj = TopicModel(reviews)
+
 else: # put additional models here.
   print("Argument Error: invalid model specified")
   sys.exit()
@@ -134,6 +138,7 @@ for __, json_obj in reviews:
 #we can add more logic.
 model_classified = model_obj.classify_all(reviews)
 
+print model_classified[1]
 correct = 0
 index = 0
 
@@ -142,7 +147,7 @@ for classification in model_classified:
   # if the tuple the baseline predicted is correct...
   if classification == reviews[index][0]:
     correct = correct + 1
-  index = index + 1
+    index = index + 1
 
 print (float(correct) / len(reviews)) # print accuracy
 
