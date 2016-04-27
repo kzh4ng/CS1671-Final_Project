@@ -10,7 +10,7 @@ import sys
 # Create command line arguments.
 parser = argparse.ArgumentParser(description="Uses NLP models to predict the season of a Yelp review.") # TODO: revise so-called project title.
 parser.add_argument("-m", required=True, default="baseline", help="the NLP model to be used", action="store", dest="model")
-parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name", action="store", dest="classifier")
+parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name or business category", action="store", dest="classifier")
 parser.add_argument("-i", required=False, default = "False", help="indicator for whether training and test data should be inverted", action="store", dest="invert")
 args = parser.parse_args()
 
