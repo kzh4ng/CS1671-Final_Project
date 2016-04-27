@@ -96,6 +96,22 @@ def print_city_list():
 	#for c in city_dict:
 	#	print c + ": " + str(city_dict[c])
 
+def get_all_categories():
+	business_list = []
+	with open('yelp_academic_dataset_business.json') as f:
+		for line in f:
+			business_list.append(json.loads(line))
+	categories_dict = dict()
+	for b in business_list:
+		curr_cats = b["categories"]
+		for c in curr_cats:
+			if c in categories_dict:
+				categories_dict[c] += 1
+			else:
+				categories_dict[c] = 1
+	return categories_dict
+
+
 def parse_by_city(city):
 	business_list = []
 	with open('yelp_academic_dataset_business.json') as f:
@@ -104,7 +120,7 @@ def parse_by_city(city):
 	city_business_list = []
 	for b in business_list:
 		if b['city'] == city:
-	city_business_list.append(b['business_id'])
+			city_business_list.append(b['business_id'])
 	return city_business_list
 	#return business_list
 
@@ -209,12 +225,18 @@ def sort_reviews_by_season(reviews, city):
 			fallfile2.write("\n")
 		
 
+
+d = get_all_categories()
+for w in sorted(d, key=d.get, reverse=True):
+  print w, d[w]
+
+
 # Generate four text files, by season, of reviews for a specific city.
-pittsburgh_business_list = parse_by_city("All")
+'''pittsburgh_business_list = parse_by_city("All")
 print len(pittsburgh_business_list)
 pittsburgh_reviews = get_reviews_from_business_list(pittsburgh_business_list)
 print len(pittsburgh_reviews)
-sort_reviews_by_season(pittsburgh_reviews, "all")
+sort_reviews_by_season(pittsburgh_reviews, "all")'''
 
 '''
 print "Las Vegas"
