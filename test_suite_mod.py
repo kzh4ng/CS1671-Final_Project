@@ -22,9 +22,9 @@ reviews = [] #  creating a list of reviews to classify
 
 # Reading training data into reviews list
 #categories = {"food":0, "shopping":0, "hotels-travel":0, "nightlife":0, "health":0}
-categories = {"chinese":0, "japanese": 0}
+#categories = {"chinese":0, "japanese": 0}
 #categories = {"mexican":0, "italian":0}
-#categories = {"japanese":0, "chinese": 0, "thai":0, "korean":0, "indian":0, "middle-eastern":0, "greek":0, "american-traditional":0, "italian":0}
+categories = {"japanese":0, "chinese": 0, "thai":0, "korean":0, "indian":0, "middle-eastern":0, "greek":0, "american-traditional":0, "italian":0, "mexican":0}
 
 if args.invert == "False":
   for classifier in categories:
