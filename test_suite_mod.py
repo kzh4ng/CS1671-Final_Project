@@ -3,7 +3,8 @@ from baseline import BaseLine
 from logreg import LogReg
 from naivebayes import NaiveBayes
 from review import Review
-from topic2 import TopicModel
+from KNN import knn
+#from topic2 import TopicModel
 import argparse
 import json
 import sys
@@ -11,7 +12,7 @@ import sys
 # Create command line arguments.
 parser = argparse.ArgumentParser(description="Uses NLP models to predict the season of a Yelp review.") # TODO: revise so-called project title.
 parser.add_argument("-m", required=True, default="baseline", help="the NLP model to be used", action="store", dest="model")
-parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name", action="store", dest="classifier")
+#parser.add_argument("-c", required=True, help="the classifier for datasets, i.e. city name", action="store", dest="classifier")
 parser.add_argument("-i", required=False, default = "False", help="indicator for whether training and test data should be inverted", action="store", dest="invert")
 args = parser.parse_args()
 
@@ -19,15 +20,12 @@ args = parser.parse_args()
 reviews = [] #  creating a list of reviews to classify
 #classifier = args.classifier.lower() # stores file classifier (i.e. "pittsburgh")
 
-#  Reading training data into reviews list
-categories = {"doctors": 0, "chinese":0}
-#categories = {"japanese":0, "chinese": 0, "thai":0, "indian":0, "middle-eastern":0}
-categories = {"mexican":0, "chinese":0, "italian":0, "japanese":0, "middle-eastern":0, "greek":0, "indian":0, "thai":0, "american-traditional":0, "korean":0, "lebanese":0, "vietnamese":0}
-'''categories = {"mexican": 0, "chinese": 0, "pizza": 0, "sandwiches": 0, 
-  "burgers": 0, "fast-food": 0, "italian": 0, "american-traditional": 0,
-  "japanese": 0, "coffee-tea": 0, "specialty-food": 0, "bakeries": 0, 
-  "ice-cream-frozen-yogurt": 0, "indian": 0, "greek": 0, "middle-eastern": 0, 
-  "donuts": 0, "steakhouses": 0, "seafood": 0, "thai": 0, "korean":0, "lebanese":0, "vietnamese":0}'''
+# Reading training data into reviews list
+#categories = {"food":0, "shopping":0, "hotels-travel":0, "nightlife":0, "health":0}
+categories = {"chinese":0, "japanese": 0}
+#categories = {"mexican":0, "italian":0}
+#categories = {"japanese":0, "chinese": 0, "thai":0, "korean":0, "indian":0, "middle-eastern":0, "greek":0, "american-traditional":0, "italian":0}
+
 if args.invert == "False":
   for classifier in categories:
     with open("spring-"+classifier+"-training.json") as json_file:
@@ -82,11 +80,11 @@ elif (model == "logreg"):
 elif (model == "multinomialNB"):
   model_obj = NaiveBayes(reviews, "multinomial")
 
-elif (model == "gaussianNB"):
-  model_obj = NaiveBayes(reviews, "gaussian")
-
 elif (model == "lda"):
   model_obj = TopicModel(reviews)
+
+elif (model == "kNearestNeighbors"):
+  model_obj = knn(reviews,target)
 
 else: # put additional models here.
   print("Argument Error: invalid model specified")
